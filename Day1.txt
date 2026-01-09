@@ -1,0 +1,182 @@
+We have 3 types of employees Clerk, Programmer & Manager
+* Need to create 1 object of each type
+* The salary and designation are fixed for the given types 
+	Clerk 		- 20000 & "CLERK"
+	Programmer	- 50000 & "PROGRAMMER"
+	Manager		- 100000 & "MANAGER"
+* The raise salary should now increment the salary of Clerk by 3000, Programmer by 10000 & Manager by 25000
+
+
+
+import java.util.*;
+class Employee {
+    String employeeName;
+    int employeeAge;
+    float employeeSalary;
+    boolean isCreated = false;
+    Employee(float salary) {
+        this.employeeSalary = salary;
+    }
+
+    public void create(Scanner inp) {
+        System.out.print("Enter employee name: ");
+        employeeName = inp.next();
+
+        System.out.print("Enter employee age: ");
+        employeeAge = inp.nextInt();
+
+        if (employeeAge <= 0) {
+            System.out.println("Employee age should be greater than zero");
+            return;
+        }
+
+        isCreated = true;
+        System.out.println("Employee created successfully");
+    }
+
+    public void display(String designation) {
+        
+        if (!isCreated) {
+            System.out.println("Employee not created yet!");
+            return;
+        }
+
+        System.out.println("\nEmployee Details:");
+        System.out.println("Name: " + employeeName);
+        System.out.println("Age: " + employeeAge);
+        System.out.println("Salary: " + employeeSalary);
+        System.out.println("Designation: " + designation);
+    }
+
+    public void raiseSalary(Scanner ip) {
+        // overridden in child classes
+    }
+}
+
+class Clerk extends Employee {
+    Clerk(float salary) {
+        super(salary);
+    }
+
+    @Override
+    public void raiseSalary(Scanner ip) {
+        employeeSalary += 3000;
+        System.out.println("New Salary: " + employeeSalary);
+    }
+
+}
+
+class Manager extends Employee {
+    Manager(float salary) {
+        super(salary);
+    }
+
+    @Override
+    public void raiseSalary(Scanner ip) {
+        employeeSalary += 25000;
+        System.out.println("New Salary: " + employeeSalary);
+    }
+}
+
+class Programmer extends Employee {
+    Programmer(float salary) {
+        super(salary);
+    }
+
+    @Override
+    public void raiseSalary(Scanner ip) {
+        employeeSalary += 10000;
+        System.out.println("New Salary: " + employeeSalary);
+    }
+}
+
+class GeneralEmployee extends Employee {
+    GeneralEmployee(float salary) {
+        super(salary);
+    }
+
+    @Override
+    public void raiseSalary(Scanner ip) {
+        System.out.print("Enter raise amount: ");
+        float raise = ip.nextFloat();
+
+        if (raise <= 0) {
+            System.out.println("Raise amount must be positive");
+            return;
+        }
+
+        employeeSalary += raise;
+        System.out.println("New Salary: " + employeeSalary);
+    }
+}
+
+
+
+public class Main {
+    static Employee em;
+    static String designation;
+    static  ArrayList<Employee> employee=new ArrayList<>();
+    public static void main(String[] args) {
+
+        Scanner ip = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\nChoices:");
+            System.out.println("1. Create");
+            System.out.println("2. Display");
+            System.out.println("3. Raise Salary");
+            System.out.println("4. Exit");
+            System.out.print("Enter choice: ");
+
+            int choice = ip.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter designation: ");
+                    designation = ip.next().toUpperCase();
+
+                    System.out.print("Enter salary: ");
+                    float salary = ip.nextFloat();
+
+                    if (designation.equals("CLERK"))
+                        em = new Clerk(salary);
+                      
+                    else if (designation.equals("MANAGER"))
+                        em = new Manager(salary);
+                       
+                    else if (designation.equals("PROGRAMMER"))
+                        em = new Programmer(salary);
+                        
+                    else
+                        em = new GeneralEmployee(salary);
+                    em.create(ip);
+                    employee.add(em);
+                    break;
+
+                case 2:
+                    if (em != null)
+                        for(Employee e:employee){
+                            e.display(designation);
+                        }
+                    else
+                        System.out.println("Employee not created yet!");
+                    break;
+
+                case 3:
+                    if (em != null)
+                        em.raiseSalary(ip);
+                    else
+                        System.out.println("Employee not created yet!");
+                    break;
+
+                case 4:
+                    System.out.println("End");
+                    ip.close();
+                    return;
+
+                default:
+                    System.out.println("Invalid choice!");
+            }
+        }
+    }
+}
