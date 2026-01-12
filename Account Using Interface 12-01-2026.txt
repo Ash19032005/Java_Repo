@@ -1,0 +1,97 @@
+
+import java.util.*;
+// * Every Employee has an account
+// Account
+// -----------
+// Balance Enquiry
+// Mini Statement
+// Credit
+// Withdrawal
+ 
+// Savings Account
+// Current Account
+
+
+interface AccountDetails{
+    int balanceEnquiry();
+    void miniStatement(String accountType);
+    void creditMoney(float money);
+    void WithdrawalMoney(float money);
+}
+
+class Employee implements AccountDetails{
+    private int balance;
+    public Employee(int initialAmount){
+        this.balance=initialAmount;
+    }
+    
+    public int balanceEnquiry(){
+        return balance;
+    }
+    public void miniStatement(String ch){
+        System.out.println("Printing the last 10 transaction statements");
+        if(ch.equals("SAVINGS")){
+            for(int i=0;i<5;i++){
+            System.out.printf("Transaction %d\n",i+1);
+        }
+        }
+        else if(ch.equals("CURRENT")){
+            for(int i=0;i<10;i++){
+            System.out.printf("Transaction %d\n",i+1);
+        }
+        }
+        
+    }
+
+    public void creditMoney(float money){
+         if (money <= 0) {
+            System.out.println("Invalid credit amount");
+            return;
+        }
+        balance+=money;
+    }
+
+    public void WithdrawalMoney(float money){
+         if (money <= 0) {
+            System.out.println("Invalid Withdrawal amount");
+            return;
+        }
+        balance-=money;
+    }
+}
+
+
+public class Account{
+    static Scanner ip=new Scanner(System.in);
+    public static void main(String[] args) {
+        Employee e1=new Employee(10000); 
+
+        while (true) { 
+            System.out.println("1. Balance Enquiry  2. Mini Statement  3. Credit Money 4. Withdrawal Money");
+            System.out.println("Enter your choice:");
+            int choice=ip.nextInt();
+        switch (choice) {
+            case 1:
+                int balanceAmount=e1.balanceEnquiry();
+                System.out.printf("Balance Enquiry: %d\n",balanceAmount);
+                break;
+            case 2:
+                System.out.println("Enter Savings account or Current account:");
+                String ch=ip.next();
+                e1.miniStatement(ch);
+                break;
+            case 3:
+                System.out.println("Enter the amount of money to credit:");
+                float Money=ip.nextFloat();
+                e1.creditMoney(Money);
+                break;
+            case 4:
+                 System.out.println("Enter the amount of money to withdrawal:");
+                float withdrawMoney=ip.nextFloat();
+                e1.WithdrawalMoney(withdrawMoney);
+            default:
+                System.out.println("Invalid choice");
+        }
+        }}
+    }
+
