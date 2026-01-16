@@ -1,0 +1,83 @@
+
+
+--------------------------
+
+  1. Create
+
+  2. Display
+
+  3. Raise Salary
+
+  4. Exit
+
+--------------------------
+
+Enter choice :- 1
+
+--------------------------
+
+1. Clerk
+
+2. Programmer
+
+3. Manager
+
+4. Exit
+
+--------------------------
+
+Enter choice :- 2
+
+Enter name : 
+
+Enter age : 
+
+--------------------------
+
+1. Clerk
+
+2. Programmer
+
+3. Manager
+
+4. Exit
+
+--------------------------
+
+Enter choice :- 2
+
+Enter name : 
+
+Enter age : 
+
+--------------------------
+
+1. Clerk
+
+2. Programmer
+
+3. Manager
+
+4. Exit
+
+--------------------------
+
+Enter choice :- 4
+
+--------------------------
+
+  1. Create
+
+  2. Display
+
+  3. Raise Salary
+
+  4. Exit
+
+--------------------------
+
+Enter choice :- 2
+ 
+All the employees
+
+ 

@@ -1,0 +1,239 @@
+Implement custom Exception handling in the Employee management code
+
+
+import java.util.*;
+class Employee {
+    String employeeName;
+    int employeeAge;
+    float employeeSalary;
+    boolean isCreated = false;
+    String designation;
+
+    Employee(float salary, String designation) {
+        this.employeeSalary = salary;
+        this.designation = designation;
+
+    }
+
+    public void create(Scanner inp) throws InvalidAgeException {
+        System.out.print("Enter employee name: ");
+        employeeName = inp.next();
+
+        System.out.print("Enter employee age: ");
+        employeeAge = inp.nextInt();
+        if(employeeAge<21 || employeeAge>60){
+            throw new InvalidAgeException("Age must be between 21 and 60");
+        }
+
+        isCreated = true;
+        System.out.println("Employee created successfully");
+    }
+
+    public void display() {
+        if (!isCreated) {
+            System.out.println("Employee not created yet!");
+            return;
+        }
+
+        System.out.println("\nEmployee Details:");
+        System.out.println("Name: " + employeeName);
+        System.out.println("Age: " + employeeAge);
+        System.out.println("Salary: " + employeeSalary);
+        System.out.println("Designation: " + this.designation);
+    }
+
+    public void raiseSalary(Scanner ip) {
+        // overridden
+    }
+}
+
+class Clerk extends Employee {
+    Clerk(float salary) {
+        super(salary, "CLERK");
+    }
+
+    @Override
+    public void raiseSalary(Scanner ip) {
+        employeeSalary += 3000;
+        System.out.println("New Salary: " + employeeSalary);
+    }
+}
+
+class Manager extends Employee {
+    Manager(float salary) {
+        super(salary, "MANAGER");
+    }
+
+    @Override
+    public void raiseSalary(Scanner ip) {
+        employeeSalary += 25000;
+        System.out.println("New Salary: " + employeeSalary);
+    }
+}
+
+class Programmer extends Employee {
+    Programmer(float salary) {
+        super(salary, "PROGRAMMER");
+    }
+
+    @Override
+    public void raiseSalary(Scanner ip) {
+        employeeSalary += 10000;
+        System.out.println("New Salary: " + employeeSalary);
+    }
+}
+
+class GeneralEmployee extends Employee {
+    GeneralEmployee(float salary, String designation) {
+        super(salary, designation);
+    }
+
+    @Override
+    public void raiseSalary(Scanner ip) {
+        System.out.print("Enter raise amount: ");
+        float raise = ip.nextFloat();
+
+        if (raise <= 0) {
+            System.out.println("Raise amount must be positive");
+            return;
+        }
+
+        employeeSalary += raise;
+        System.out.println("New Salary: " + employeeSalary);
+    }
+}
+
+// Exception handling 
+class InvalidAgeException extends Exception{
+    public InvalidAgeException(String msg){
+        super(msg);
+    }
+}
+
+class choiceException extends Exception{
+    public choiceException(String msg){
+        super(msg);
+    }
+}
+
+class salaryException extends Exception{
+    public salaryException(String msg){
+        super(msg);
+    }
+}
+
+public class Main {
+    static final int MAX = 100;
+    static Employee[][] employees = new Employee[MAX][1];
+    static int count = 0;
+
+    public static void main(String[] args) {
+        Scanner ip = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\nChoices:");
+            System.out.println("1. Create");
+            System.out.println("2. Display");
+            System.out.println("3. Raise Salary");
+            System.out.println("4. Exit");
+            System.out.print("Enter choice: ");
+            int choice;
+            try {
+                choice = ip.nextInt();
+
+                if (choice < 1 || choice > 4) {
+                    throw new choiceException("Choose option between 1 and 4");
+                }
+
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input type. Enter integer only.");
+                ip.next();
+                continue;
+            } catch (choiceException e) {
+                System.out.println(e.getMessage());
+                continue;
+            }
+            switch (choice) {
+                case 1:
+                    if (count >= MAX) {
+                        System.out.println("Employee limit reached!");
+                        break;
+                    }
+
+                    System.out.print("Enter designation: ");
+                    String designation = ip.next().toUpperCase();
+
+                    System.out.print("Enter salary: ");
+                    float salary;
+                    salary = ip.nextFloat();
+                    try {
+                         if(salary<=0){
+                            throw new salaryException("Salary must be positve");
+                         }
+                    } 
+                    catch(salaryException e){
+                        System.out.println(e.getMessage());
+                        continue;
+                    }
+
+                    Employee em;
+                    switch (designation) {
+                        case "CLERK":
+                            em = new Clerk(salary);
+                            break;
+                        case "MANAGER":
+                            em = new Manager(salary);
+                            break;
+                        case "PROGRAMMER":
+                            em = new Programmer(salary);
+                            break;
+                        default:
+                            em = new GeneralEmployee(salary, designation);
+                    }
+                    try {
+                        em.create(ip);
+                        employees[count][0] = em;
+                        count++;
+                    }
+                    catch (InvalidAgeException e) {
+                        System.out.println("Error:"+ e.getMessage());
+                    }
+                    catch(InputMismatchException e){
+                        System.out.println("Invalid input type");
+                        
+                    }
+                    break;
+                case 2:
+                    if (count == 0) {
+                        System.out.println("No employees created yet!");
+                    } else {
+                        for (int i = 0; i < count; i++) {
+                            employees[i][0].display();
+                        }
+                    }
+                    break;
+
+                case 3:
+                    if (count == 0) {
+                        System.out.println("No employees available!");
+                        break;
+                    }
+
+                    for(int i=0;i<count;i++){
+                        employees[i][0].raiseSalary(ip);
+
+                    }
+                    break;
+                case 4:
+                    System.out.println("End");
+                    ip.close();
+                    return;
+
+                default:
+                    System.out.println("Invalid choice!");
+            }
+        }
+    }
+}
+
+
