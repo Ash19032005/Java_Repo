@@ -1,0 +1,62 @@
+// Bike Racing Game
+// -----------------------
+// * Ask you to enter 10 bikers name
+// * Ask you to enter the distance coverage in KM
+// * Display every 100 mtrs coverage, the name of biker
+// * The speed should vary for every biker dynamically
+// * Display the final Dashboard with the Rankings, Start time, End time, Time taken
+ 
+// Rahul covered 100mtrs
+// Sam covered 100mtrs.
+// John covered 200mtrs..
+
+import java.util.*;
+class Rider extends Thread{
+    int mtrs;
+    String name;
+
+    Rider(String name, int mtrs){
+        this.name=name;
+        this.mtrs=mtrs;
+    }
+     // Shared list to store finish order
+    static List<String> finished = new ArrayList<>();
+    public void run(){
+        for(int i=1;i<=mtrs;i++){
+            if(i%100==0){
+                System.out.println(name + " covered " + i + " metres");
+            }
+        }
+        synchronized(Rider.class){
+            finished.add(name);
+        }
+    }
+}
+class BikeThread{
+    public static void main(String args[]){
+        Scanner ip=new Scanner(System.in);
+        System.out.println("Enter the number of bike riders:");
+        int bikeRiders=ip.nextInt();
+        System.out.println("Enter the distance coverage in kms:");
+        int kms=ip.nextInt();
+        int mtrs=kms*1000;
+        ArrayList<Thread> threads=new ArrayList<>();
+        System.out.println("Ride starts in");
+        for(int i=0;i<bikeRiders;i++){
+            Thread t=new Rider("R"+(i+1),mtrs);
+            threads.add(t);
+            t.start();
+        }
+        for(Thread t:threads){
+            try {
+                t.join();
+        } catch (InterruptedException e) {
+                e.printStackTrace();
+         }
+        }
+        System.out.println("\nAll riders finished the race");
+        for(int i=0;i<Rider.finished.size();i++){
+            System.out.println(Rider.finished.get(i)+ " Place " + (i+1));
+        }
+    }
+}
