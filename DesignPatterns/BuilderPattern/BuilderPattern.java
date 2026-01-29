@@ -18,6 +18,8 @@ class User{
         System.out.println("User created: "+this.age+this.name+this.email);
     }
 
+
+    // This class need to be static
     static class Builder{
         private String name;
         private int age;
