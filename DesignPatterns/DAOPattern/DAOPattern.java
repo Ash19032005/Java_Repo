@@ -46,11 +46,11 @@ class Student{
 
 // DB Connection using singleton class
 class ConnectDB{
-    static Connection dbInstance;
+    private static Connection dbInstance;
     public static Connection getInstance(){
         if(dbInstance==null){
             try {
-                Connection dbInstance=DriverManager.getConnection("jdbc:postgresql://localhost:8000/TEST","postgres","2005");
+                dbInstance=DriverManager.getConnection("jdbc:postgresql://localhost:8000/TEST","postgres","2005");
                 return dbInstance;
             } 
             catch (Exception e) {
